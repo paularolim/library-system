@@ -1,5 +1,6 @@
 const sequelize = require('sequelize');
 const connection = require('../database/connection');
+const Loan = require('./Loan');
 
 const Book = connection.define(
     'book',
