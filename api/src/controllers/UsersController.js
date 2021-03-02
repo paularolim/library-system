@@ -1,4 +1,5 @@
 const User = require('../models/User');
+const Loan = require('../models/Loan');
 
 exports.showAll = (req, res) => {
     User.findAll()
@@ -41,4 +42,14 @@ exports.update = (req, res) => {
     User.update({ name, cpf }, { where: { id } })
         .then(() => res.status(200).json({ message: 'User updated' }))
         .catch(() => res.status(400).json({ message: 'Error updating user' }));
+};
+
+exports.getLoans = (req, res) => {
+    const { id } = req.params;
+
+    User.findAll({ where: { id }, include: Loan })
+        .then((loans) => res.status(200).json(loans))
+        .catch((err) =>
+            res.status(400).json({ message: 'error listing loans from user' })
+        );
 };
