@@ -16,9 +16,18 @@ const Loan = connection.define(
             type: sequelize.DATE,
             allowNull: false,
         },
-        devolutionDate: {
+        expectedDevolutionDate: {
             type: sequelize.DATE,
             allowNull: false,
+        },
+        returnedDate: {
+            type: sequelize.DATE,
+            allowNull: true,
+        },
+        returned: {
+            type: sequelize.BOOLEAN,
+            allowNull: true,
+            default: false
         }
     },
     { timestamps: false }
