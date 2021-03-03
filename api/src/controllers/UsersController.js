@@ -44,7 +44,7 @@ exports.update = (req, res) => {
         .catch(() => res.status(400).json({ message: 'Error updating user' }));
 };
 
-exports.getLoans = (req, res) => {
+exports.showAllLoans = (req, res) => {
     const { id } = req.params;
 
     User.findAll({ where: { id }, include: Loan })
@@ -52,4 +52,31 @@ exports.getLoans = (req, res) => {
         .catch((err) =>
             res.status(400).json({ message: 'error listing loans from user' })
         );
+};
+
+exports.showOneLoan = (req, res) => {
+    const { id, idLoan } = req.params;
+
+    User.findOne({
+        where: { id },
+        include: { model: Loan, where: { id: idLoan } },
+    })
+        .then((loan) => res.status(200).json(loan))
+        .catch(() =>
+            res.status(400).json({ message: 'error listing loan from user' })
+        );
+};
+
+exports.updateLoan = (req, res) => {
+    const { id, idLoan } = req.params;
+
+    User.findOne({
+        where: { id },
+        include: { model: Loan, where: { id: idLoan } },
+    })
+        .then((user) => {
+            user.loan.update({ returned: true, returnedDate: Date.now() });
+            res.status(200).json({ message: 'Loaded book returned' });
+        })
+        .catch((err) => res.status(400).json({ message: 'Error updating loan', err }));
 };
